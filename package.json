@@ -1,13 +1,13 @@
 {
   "name": "it.magius.gamedek.theme.default",
   "version": "1.0.0",
-  "description": "Gamedek Module",
+  "description": "Gamedek default theme",
   "main": "plugin.js",
   "repository": "$PURL",
-      "author": {
-        "name": "Magius(CHE)",
-        "email": "magiusche@magius.it"
-      },
-  "license": "GNU GPL",
+  "author": {
+    "name": "Magius(CHE)",
+    "email": "magiusche@magius.it"
+  },
+  "license": "GPL-3.0-or-later",
   "private": false
-} 
+}
