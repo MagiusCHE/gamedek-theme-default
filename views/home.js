@@ -69,7 +69,7 @@
 
         const newone = (cnt.length == 0)
         if (newone) {
-            cnt = $(this.getTemplateHtml('gamelist_item'))
+            cnt = $(await core.theme.translateBlock(this.getTemplateHtml('gamelist_item')))
         }
         const game = gameinfo.props
 
@@ -107,6 +107,10 @@
         core.theme.onNewElementAdded(cnt)
         if (newone) {
             $(cnt).on('click', () => {
+                $('.gameitem').removeClass('active')
+                cnt.addClass('active')
+            })
+            $(cnt).on('dblclick', () => {
                 //this.log(e.originalEvent)
                 if (cnt.is('.started')) {
                     this.openDialogGame(gameinfo.hash)

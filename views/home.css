@@ -21,6 +21,14 @@
     width: 13.8rem;
     height: 6.5rem;
 }
+.gameitem.active {
+    z-index: 2 !important;
+}
+.gameitem.active .frame {
+    box-shadow: 0px 0px 21px 6px #6fb0ff54 !important;
+    transform: scale(1.1);
+    border-color: #6fb0ffbd !important;
+}
 
 [data-gamelist-style="block"] #gamegrid.portrait .gameitem{
     width: 7rem;
@@ -105,7 +113,7 @@
 
 [data-gamelist-style="block"] #gamegrid .gameitem:hover
 {
-    z-index: 2;
+    z-index: 3;
 }
 
 [data-gamelist-style="block"] #gamegrid .gameitem:hover .frame

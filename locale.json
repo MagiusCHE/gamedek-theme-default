@@ -1,4 +1,8 @@
 {
-    "en": {},
-    "it": {}
+    "en": {
+        "comm_dblclick_tostart": "Double-click to start game"
+    },
+    "it": {
+        "comm_dblclick_tostart": "Doppio-click per avviare il gioco"
+    }
 }
