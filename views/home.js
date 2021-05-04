@@ -107,17 +107,17 @@
         core.theme.onNewElementAdded(cnt)
         if (newone) {
             $(cnt).on('click', () => {
-                $('.gameitem').removeClass('active')
-                cnt.addClass('active')
-            })
-            $(cnt).on('dblclick', () => {
-                //this.log(e.originalEvent)
+                if (!$(cnt).is('.active')) {
+                    $('.gameitem').removeClass('active')
+                    cnt.addClass('active')
+                    return
+                }
                 if (cnt.is('.started')) {
                     this.openDialogGame(gameinfo.hash)
                 } else {
                     this.startGameByHash(gameinfo.hash)
                 }
-            })
+            })            
             $(cnt).on('contextmenu', () => {
                 this.openDialogGame(gameinfo.hash)
             })
