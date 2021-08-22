@@ -141,7 +141,7 @@ body.loading #gd-view
     display: none;
 }
 
-input:disabled{
+input[type="text"]:disabled{
     opacity: 0.7;
 }
 

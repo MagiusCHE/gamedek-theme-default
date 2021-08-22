@@ -117,7 +117,7 @@
                 } else {
                     this.startGameByHash(gameinfo.hash)
                 }
-            })            
+            })
             $(cnt).on('contextmenu', () => {
                 this.openDialogGame(gameinfo.hash)
             })
@@ -171,6 +171,74 @@
                 core.theme.changeView('addinfo', gameinfo)
             })
         }
+
+        body.find('.btn-delete').on('click', async () => {
+            const uninstalldlg = $(this.getTemplateHtml('game_uninstall_dialog'))
+            await core.theme.showDialog({
+                title: (await core.kernel.translateBlock('${lang.dialog_game_uninstall}')) + gameinfo.props.info.title
+                , body: uninstalldlg
+                , onPreShow: async (modal) => {
+
+                    //this.log(gameinfo)
+                    const ret = (await core.kernel.broadcastPluginMethod('gameengine', 'querySwitchForUninstall', hash)).returns.all
+                    for (const provider in ret) {
+                        for (const swc in ret[provider].switches) {
+                            const btn = $(`<div class="col-12 dg_uni_btn" data-prov-id="${provider}" data-swc-id="${swc}">
+                                <div class="custom-control custom-switch">
+                                    <input class="custom-control-input" type="checkbox" value="" id="${swc}">
+                                    <label class="custom-control-label" for="${swc}">
+                                        ${ret[provider].switches[swc].label}
+                                    </label>
+                                </div>
+                            </div>`)
+                            modal.find('.game_uninstall_dialog').append(btn)
+                        }
+                    }
+
+                    const html = '<button type="button" class="btn btn-danger btn-proceed" data-dismiss="modal">${lang.dialog_proceed}</button>'
+                        + '<button type="button" class="btn btn-secondary" data-dismiss="modal">${lang.dialog_game_uninstall}</button>'
+
+                    //modal.find('.modal-body #gu_rmrf_cmd_path').text()
+                    modal.find('.modal-footer').html(await core.kernel.translateBlock(html));
+
+                    modal.find('.modal-footer .btn-proceed').on('click', () => {
+                        const toexec = []
+                        modal.find('.game_uninstall_dialog').parent().find('.dg_uni_btn').each(function() {
+                            const prov = $(this).attr('data-prov-id')
+                            const swc = $(this).attr('data-swc-id')
+                            if (prov && swc && $(this).find('input').is(':checked')) {
+                                toexec.push({
+                                    prov: prov
+                                    , swc: swc
+                                })
+                            }
+                        })
+
+
+
+                        return new Promise(async (resolve) => {
+                            try {
+                                core.kernel.sendEvent('showProgress', await core.kernel.translateBlock('${lang.game_dialog_uninstall_inprogress}'))
+                                core.kernel.sendEvent('allowHideProgress', false)
+                                for (const obj of toexec) {
+                                    this.log('executeUninstallOf', obj)
+                                    await core.kernel.broadcastPluginMethod('gameengine', 'executeUninstallOf', hash, obj.swc, obj.prov)
+                                }
+                                await core.kernel.gameList_removeGame(hash)
+                                $(`#gamegrid .gameitem[data-hash="${hash}"]`).fadeOut(function() {
+                                    $(`#gamegrid .gameitem[data-hash="${hash}"]`).remove()
+                                })
+                            } finally {
+                                core.kernel.sendEvent('allowHideProgress', true)
+                                core.kernel.sendEvent('hideProgress')
+                            }
+                        })
+                    })
+
+                    $(modal).attr('data-game-hash', gameinfo.hash)
+                }
+            })
+        })
 
         body.find('.btn-stop').on('click', async () => {
             body.find('.btn-stop').addClass('game-terminating')

@@ -8,7 +8,18 @@
             <span class="icon material-icons-outlined btn-start">play_circle_outline</span>
             <span class="icon material-icons-outlined btn-stop">stop_circle</span>
             <span class="icon material-icons-outlined btn-edit" data-dismiss="modal">edit</span>
+            <span class="icon material-icons-outlined btn-delete" data-dismiss="modal">delete_forever</span>
         </div>
+    </div>
+    <div class="template row game_uninstall_dialog" id="game_uninstall_dialog">
+        <div class="col-12 dg_uni_btn">
+            <div class="custom-control custom-switch">
+                <input class="custom-control-input" type="checkbox" value="" id="gu_removelib" checked disabled>
+                <label class="custom-control-label" for="gu_removelib">
+                    ${lang.game_dialog_uninstall_switch}
+                </label>
+            </div>
+        </div>        
     </div>
     <div id="view-background"></div>
     <div id="app-view">
