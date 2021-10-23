@@ -196,7 +196,7 @@
                     }
 
                     const html = '<button type="button" class="btn btn-danger btn-proceed" data-dismiss="modal">${lang.dialog_proceed}</button>'
-                        + '<button type="button" class="btn btn-secondary" data-dismiss="modal">${lang.dialog_game_uninstall}</button>'
+                        + '<button type="button" class="btn btn-secondary" data-dismiss="modal">${lang.dialog_abort}</button>'
 
                     //modal.find('.modal-body #gu_rmrf_cmd_path').text()
                     modal.find('.modal-footer').html(await core.kernel.translateBlock(html));
