@@ -23,4 +23,28 @@
             </div>
         </main>
     </div>
+    <div class="template setting_keyvalue_cont" id="setting_keyvalue_cont">
+        <div class="row setting_keyvalue_elems"></div>
+        <div class="setting_keyvalue_tbox mt-2 mb-2">
+            <div class="btn btn-add btn-outline-light btn-sm">
+                <span title="" class="align-text-top icon material-icons-outlined">
+                    add
+                </span>
+                ${lang.common_add}
+            </div>
+        </div>
+    </div>
+    <div class="template row setting_keyvalue" id="setting_keyvalue">
+        <div class="col-5">
+            <input type="text" class="form-control-plaintext label" />
+        </div>
+        <div class="col-6">
+            <input type="text" class="form-control-plaintext value" />
+        </div>
+        <div class="col-1 coldel">
+            <span title="" class="icon material-icons-outlined btn-del" onclick="$(this).parent().parent().remove()">
+                delete_forever
+            </span>
+        </div>
+    </div>
 </body>

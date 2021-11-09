@@ -17,8 +17,16 @@
                     let value
                     if (item.type == 'readonly') {
                         value = item.default !== undefined ? item.default : $('#' + thisuid).val()
-                    }
-                    else if ($('#' + thisuid).is('input[type="checkbox"]')) {
+                    } else if (item.type == 'keyvalue') {
+                        value = {}
+                        $('#' + thisuid).find('.setting_keyvalue').each(function() {
+                            const lab = $(this).find('.label').val().trim()
+                            const val = $(this).find('.value').val().trim()
+                            if (lab !== undefined && lab.length > 0 && val !== undefined && val.length > 0) {
+                                value[lab] = val
+                            }
+                        })
+                    } else if ($('#' + thisuid).is('input[type="checkbox"]')) {
                         if ($('#' + thisuid).is(':checked')) {
                             value = $('#' + thisuid).val()
                         }
@@ -35,8 +43,8 @@
                     }
                     if (!value && item.required) {
                         await core.theme.showDialog({
-                            title: await core.kernel.translateBlock('${lang.ge_com_info_required_title}'),
-                            body: await core.kernel.translateBlock('${lang.ge_com_info_required "' + item.label + '"}'),
+                            title: await core.kernel.translateBlock('${lang.ge_com_required_title}'),
+                            body: await core.kernel.translateBlock('${lang.ge_com_required "' + item.label + '"}'),
                             understand: true
                         })
                         $('#tab-btn-' + tabid).click()
@@ -142,7 +150,7 @@
 
             for (const itemname in tab.items) {
                 const item = tab.items[itemname]
-                const existingvalue = (args.props && args.props[tabid] && args.props[tabid][itemname] !== undefined) ? args.props[tabid][itemname] : item.default
+                let existingvalue = (args.props && args.props[tabid] && args.props[tabid][itemname] !== undefined) ? args.props[tabid][itemname] : item.default
                 const thisuid = `${tabid}_${itemname}`
                 const valuecont = $(`<div class="valuecont col-sm-9"></div>`)
                 const cont = $(`<div class="form-group row" data-item="${thisuid}"></div>`)
@@ -216,6 +224,23 @@
                         } else if (opt.selected) {
                             optcnt.attr('selected', 'selected')
                         }
+                    }
+                    valuecont.append(value)
+                } else if (item.type == 'keyvalue') {
+                    value = $(this.getTemplateHtml('setting_keyvalue_cont'))
+                    value.attr('id', thisuid)
+                    existingvalue = existingvalue || {}
+                    value.find('.btn-add').on('click', () => {
+                        const optcnt = $(this.getTemplateHtml('setting_keyvalue'))
+                        optcnt.find('.label').attr('placeholder', item.label_placeholder).val('')
+                        optcnt.find('.value').attr('placeholder', item.value_placeholder).val('')
+                        value.find('.setting_keyvalue_elems').append(optcnt)
+                    })
+                    for (const optval in existingvalue) {
+                        const optcnt = $(this.getTemplateHtml('setting_keyvalue'))
+                        optcnt.find('.label').attr('placeholder', item.label_placeholder).val(optval)
+                        optcnt.find('.value').attr('placeholder', item.value_placeholder).val(existingvalue[optval] === undefined ? '' : existingvalue[optval])
+                        value.find('.setting_keyvalue_elems').append(optcnt)
                     }
                     valuecont.append(value)
                 }

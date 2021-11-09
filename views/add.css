@@ -2,6 +2,36 @@
 
 }
 
+.setting_keyvalue_tbox .btn-add .icon{
+    font-size: 1rem;
+}
+
+.setting_keyvalue_elems .setting_keyvalue{
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+}
+
+.setting_keyvalue_elems .value
+,.setting_keyvalue_elems .label{
+    border-bottom: 1px solid #aaaaaa52;
+}
+
+.setting_keyvalue_elems .coldel
+{
+    padding: 0;
+    text-align: left;
+}
+
+.setting_keyvalue_elems .coldel .btn-del{
+    opacity: 0.5;
+    cursor: pointer;
+    margin-top: 0.4rem;
+}
+.setting_keyvalue_elems .coldel .btn-del:hover{
+    opacity: 1;
+}
+
+
 #importmethods_tbox button{
     margin-right: 1rem;
 }
