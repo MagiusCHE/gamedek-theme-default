@@ -1,7 +1,7 @@
 class Theme_default extends Theme {
     #firstAppear = true
-    async init(manifest) {
-        await super.init(manifest)
+    async init() {
+        await super.init()
         this.log('initialized')
     }
     async hideCurrentView() {
@@ -33,6 +33,15 @@ class Theme_default extends Theme {
         await waitFor(() => $(document).tooltip)
 
         await this.onNewElementAdded($('#gd-viewscontainer'))
+
+        const actualGameListView = await this.setting(`gameListView`)
+        //this.log(`Setup initial gridviewmode on`, actualGameListView)
+        if (actualGameListView == 'list') {            
+            this.setGridListView()
+        } else {
+            $('html').attr('data-gamelist-style', 'block')
+            $('#gamegrid').toggleClass('portrait', actualGameListView == 'portrait' )
+        }
     }
     async appearCurrentView(args) {
         super.appearCurrentView(args)
@@ -137,10 +146,12 @@ class Theme_default extends Theme {
     }
     async setGridListView() {
         $('html').attr('data-gamelist-style', 'list')
+        this.setting(`gameListView`, 'list')
     }
     async cycleGridBlockView() {
         $('html').attr('data-gamelist-style', 'block')
         $('#gamegrid').toggleClass('portrait')
+        this.setting(`gameListView`, $('#gamegrid').is('.portrait') ? 'portrait' : 'landscape')
     }
     async closeAllDialogs() {
         $('.modal').modal('hide');
