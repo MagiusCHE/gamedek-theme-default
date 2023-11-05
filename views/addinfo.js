@@ -59,13 +59,12 @@
             }
             let response = await core.kernel.broadcastPluginMethod('gameengine', `confirmGameParams`, setted, {})
             let ret = response.returns.last
-            this.log(response)
+            this.log('confirmGameParams response:', response)
             if (!ret.error) {
                 ret = (await core.kernel.broadcastPluginMethod('gameengine', this.#lastEditHash ? `updateGame` : `createNewGame`, response.args[0])).returns.last
             }
 
             if (!ret.error) {
-
                 core.theme.changeView('home')
             } else {
                 await core.theme.showDialog({
@@ -133,6 +132,28 @@
             return 0
         })
 
+        const onchange_itemvalue = function(e) {
+            //           console.log("Onchange invoked on ", e)
+            let source = undefined
+            if (e) {
+                const source_cont = $(e.target).closest(`[data-item]`)
+                //console.log(source_cont.attr('data-item'))
+                source = source_cont.find(`#${source_cont.attr('data-item')}`)
+            }
+
+/*            const sourceid = source.attr('data-item')
+            console.log(" - Target", source.attr('data-item'))
+*/
+            Object.entries(reqs.tabs).forEach(([tabid, tab]) => {
+                Object.entries(tab.items).forEach(([itemid, item]) => {
+                    if (item.when_oneitemvalue_changed) {
+                        const fun = `((source)=>{${item.when_oneitemvalue_changed}})`;
+                        eval(fun)(source)
+                    }
+                })
+            })
+        }
+
 
         for (const tabid of sorted) {
             const tab = reqs.tabs[tabid]
@@ -172,6 +193,7 @@
                 } else if (item.type == 'text') {
                     value = $(`<input type="text" class="form-control-plaintext value" id="${thisuid}"/>`)
                     valuecont.append(value)
+                    value.on('change', onchange_itemvalue);
 
                     if (existingvalue !== undefined) {
                         value.val(existingvalue)
@@ -199,6 +221,8 @@
                             value.prop("checked", false);
                         }
                     }
+
+                    value.on('change', onchange_itemvalue);
                 } else if (item.type == 'bool') {
                     value = $(`<input type="checkbox" class="form-control-plaintext value" value="1" id="${thisuid}"/>`)
                     valuecont.append(value)
@@ -208,6 +232,8 @@
                             value.attr('checked', 'checked')
                         }
                     }
+
+                    value.on('change', onchange_itemvalue);
                 } else if (item.type == 'image') {
                     browse = {
                         icon: 'insert_photo',
@@ -225,6 +251,7 @@
                             optcnt.attr('selected', 'selected')
                         }
                     }
+                    value.on('change', onchange_itemvalue);
                     valuecont.append(value)
                 } else if (item.type == 'keyvalue') {
                     value = $(this.getTemplateHtml('setting_keyvalue_cont'))
@@ -263,6 +290,7 @@
                             }
                         })
                     })
+                    value.on('change', onchange_itemvalue);
                     valuecont.append(value)
                     valuecont.append(browsebtn)
 
@@ -284,6 +312,7 @@
             core.theme.onNewElementAdded(panel)
         }
 
+        onchange_itemvalue();
         $('.nav-tabs .nav-link').first().click();
 
     }
