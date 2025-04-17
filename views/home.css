@@ -210,7 +210,8 @@
     height: 2rem;    
     background-position: center;
     background-size: contain;
-    filter: drop-shadow(2px 4px 6px black);
+    filter: drop-shadow(2px 4px 6px black) grayscale(0.2);
+    opacity: 0.8;
     display: none;
 }
 
