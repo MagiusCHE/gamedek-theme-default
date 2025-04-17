@@ -33,7 +33,7 @@
 
 [data-gamelist-style="block"] #gamegrid.portrait .gameitem{
     width: calc(min(max(100vh, 100vw) * 0.1, 14rem));
-    height: calc(min(max(100vh, 100vw) * 0.1 / 0.7778, 18rem));
+    height: calc(min(max(100vh, 100vw) * 0.1 / 0.65, 21rem));
 }
 
 [data-gamelist-style="block"] #gamegrid .gameitem .imageportrait
@@ -197,6 +197,25 @@
 #grid_main{
     padding-left: 3rem;
     padding-right: 3rem;
+}
+
+.gameitem .p-icon {
+    position: absolute;
+    pointer-events: none;
+    z-index: 9;
+    border-radius: 50%;
+    top: 4px;
+    right: 4px;
+    width: 2rem;
+    height: 2rem;    
+    background-position: center;
+    background-size: contain;
+    filter: drop-shadow(2px 4px 6px black);
+    display: none;
+}
+
+.gameitem .p-icon.visible {
+    display: inline-block;
 }
 
 .gameitem .playicon{

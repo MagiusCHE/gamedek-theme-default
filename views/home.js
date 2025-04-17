@@ -81,6 +81,12 @@
             cnt.find('.icon').css('background-image', `url('${game.info.icon}')`)
         }
 
+        if (game.info.overlayProviderIcon) {
+            cnt.find('.p-icon').css('background-image', `url('${game.info.overlayProviderIcon}')`).addClass('visible')
+        } else {
+            cnt.find('.p-icon').removeClass('visible')
+        }
+
         const imagelandscape = game.info.imagelandscape ? await core.kernel.getUrlbyGameHash(hash, game.info.imagelandscape) : undefined
         const imageportrait = game.info.imageportrait ? await core.kernel.getUrlbyGameHash(hash, game.info.imageportrait) : undefined
 
