@@ -18,8 +18,8 @@
     perspective-origin: bottom;
     cursor: pointer;
     margin:5px;
-    width: calc(min(max(100vh, 100vw) * 0.2, 30rem));
-    height: calc(min(max(100vh, 100vw) * 0.2 / 2.12, 14.15rem));
+    width: calc(min(max(100vh, 100vw) * 0.2, 20rem));
+    height: calc(min(max(100vh, 100vw) * 0.2 / 2.12, 9.43rem));
     text-align: left;
 }
 .gameitem.active {
