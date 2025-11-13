@@ -99,7 +99,8 @@
         $('#subtitle').html(action.short)
         $('#goback').attr('onclick', "$('#gd-header [data-view=\"add\"]').click()")
 
-        const rs = await core.kernel.broadcastPluginMethod('gameengine', `queryInfoForGame`, actionid, {})
+        console.log("Querying info for action ", actionid, " with args ", args)
+        const rs = await core.kernel.broadcastPluginMethod('gameengine', `queryInfoForGame`, actionid, args, {})
         const reqs = rs.returns.last
         this.#lastActionProvider = actionid
         this.#lastRequestedInfo = reqs
@@ -141,9 +142,9 @@
                 source = source_cont.find(`#${source_cont.attr('data-item')}`)
             }
 
-/*            const sourceid = source.attr('data-item')
-            console.log(" - Target", source.attr('data-item'))
-*/
+            /*            const sourceid = source.attr('data-item')
+                        console.log(" - Target", source.attr('data-item'))
+            */
             Object.entries(reqs.tabs).forEach(([tabid, tab]) => {
                 Object.entries(tab.items).forEach(([itemid, item]) => {
                     if (item.when_oneitemvalue_changed) {
