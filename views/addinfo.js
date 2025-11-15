@@ -90,18 +90,26 @@
 
         const response = await core.kernel.gameList_getImportActions()
         const actions = response.returns.last
+        //console.log("args.provider:", args.provider)
+        //console.log("actions:", actions)
         const actioninfo = {}
         actioninfo[args.provider] = actions[args.provider]
 
         const actionid = Object.keys(actioninfo)[0]
         const action = actioninfo[actionid]
 
-        $('#subtitle').html(action.short)
         $('#goback').attr('onclick', "$('#gd-header [data-view=\"add\"]').click()")
 
-        console.log("Querying info for action ", actionid, " with args ", args)
+        //console.log("Querying info for action ", actionid, " with args ", args)
         const rs = await core.kernel.broadcastPluginMethod('gameengine', `queryInfoForGame`, actionid, args, {})
         const reqs = rs.returns.last
+        if (reqs.props) {
+            $('#title').html(await core.kernel.translateBlock('${lang.editgameinfo_title}'))
+        } else {
+            $('#title').html(await core.kernel.translateBlock('${lang.addgameinfo_title}'))
+        }
+        $('#subtitle').html(action?.short ?? ("[#err: uncovered action" + actionid + ": missing plugin???]"))
+        //console.log("queryInfoForGame", reqs)
         this.#lastActionProvider = actionid
         this.#lastRequestedInfo = reqs
         this.#lastEditHash = args?.hash
@@ -242,15 +250,28 @@
                     }
                 } else if (item.type == 'select') {
                     value = $(`<select class="form-control-plaintext value" id="${thisuid}"></select>`)
+                    let oneIsSelected = false
                     for (const optval in item.opts) {
                         const opt = item.opts[optval]
                         const optcnt = $(`<option value="${optval}">${opt.title || opt}</option>`)
                         value.append(optcnt)
                         if (existingvalue !== undefined && optval == existingvalue) {
                             optcnt.attr('selected', 'selected')
+                            oneIsSelected = true
                         } else if (opt.selected) {
                             optcnt.attr('selected', 'selected')
+                            oneIsSelected = true
                         }
+                    }
+                    if (!oneIsSelected && value.find('option').length > 0) {
+                        // Scan for a preferred option
+                        const preferred = Object.entries(item.opts).find(([k, v]) => v.preferred)
+                        if (preferred) {
+                            value.val(preferred[0])
+                        } else {
+                            value.find('option').first().attr('selected', 'selected')
+                        }
+
                     }
                     value.on('change', onchange_itemvalue);
                     valuecont.append(value)
