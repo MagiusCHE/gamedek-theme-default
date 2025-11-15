@@ -6,6 +6,10 @@ html, body, #gd-viewscontainer {
     margin: 0;
 }
 
+.icon {
+    user-select: none;
+}
+
 body.gd-body{
     font-family: 'Exo 2', sans-serif ;
     font-weight: 300;
